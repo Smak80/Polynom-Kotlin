@@ -4,12 +4,13 @@ import kotlin.math.abs
 import kotlin.math.max
 
 class Polynom(coef: DoubleArray) {
+
     /**
      * Коэффициенты полинома
      */
     var coef: DoubleArray = coef.clone()
-    get() = coef.clone()
-    private set
+    get() = coef.clone() //Возвращаем копию коэффициентов полинома
+    private set //и запрещаем изменения массива извне
 
     private val ZERO = 0.0 //Изменить
 
