@@ -33,13 +33,11 @@ class Polynom(coef: DoubleArray) {
      * Удаление нулевых коэффициентов при старших степенях
      */
     private fun correctPower(){
-        var rem = coef.size
-        while (abs(coef[rem - 1]) < ZERO && rem > 1) {
-            rem--
-        }
-        val c = DoubleArray(rem)
-        System.arraycopy(coef, 0, c, 0, rem)
-        coef = c
+        var b = true
+        coef.reversed().filterIndexed { i, v ->
+            if (b && abs(v) > ZERO ) b = false
+            !(b && i>0)
+        }.reversed().toDoubleArray()
     }
 
     /**
@@ -70,4 +68,8 @@ class Polynom(coef: DoubleArray) {
      */
     operator fun minus(other: Polynom) =
         this + other * -1.0
+
+    override fun toString(): String {
+        return super.toString()
+    }
 }
