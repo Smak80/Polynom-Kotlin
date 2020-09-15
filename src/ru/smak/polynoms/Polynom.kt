@@ -8,11 +8,10 @@ class Polynom(coef: DoubleArray) {
     /**
      * Коэффициенты полинома
      */
-    var coef: DoubleArray = coef.clone()
-    get() = coef.clone() //Возвращаем копию коэффициентов полинома
-    private set //и запрещаем изменения массива извне
+    private var coef: DoubleArray = coef.clone()
 
-    private val ZERO = 0.0 //Изменить
+    val coefficients: DoubleArray
+        get() = coef.clone() //Возвращаем копию коэффициентов полинома
 
     /**
      * Степень полинома
@@ -33,11 +32,11 @@ class Polynom(coef: DoubleArray) {
     /**
      * Удаление нулевых коэффициентов при старших степенях
      */
-    private fun correctPower(){
+    private fun correctPower() {
         var b = true
-        coef.reversed().filterIndexed { i, v ->
-            if (b && abs(v) > ZERO ) b = false
-            !(b && i>0)
+        coef = coef.reversed().filterIndexed { i, v ->
+            if (v.compareTo(0.0) != 0) b = false
+            !b || (i == power)
         }.reversed().toDoubleArray()
     }
 
@@ -47,11 +46,11 @@ class Polynom(coef: DoubleArray) {
      * @return полином, являющийся результатом суммирования данного полинома с другим
      */
     operator fun plus(other: Polynom) =
-        Polynom( DoubleArray(max(power, other.power) + 1)
-            {
-            (if (it<coef.size) coef[it] else 0.0) +
-                    (if (it<other.coef[it]) other.coef[it] else 0.0)
-            }
+        Polynom(DoubleArray(max(power, other.power) + 1)
+        {
+            (if (it < coef.size) coef[it] else 0.0) +
+                    (if (it < other.coef[it]) other.coef[it] else 0.0)
+        }
         )
 
     /**
@@ -60,7 +59,7 @@ class Polynom(coef: DoubleArray) {
      * @return результат умножения данного (this) полинома на число
      */
     operator fun times(k: Double) =
-        Polynom(DoubleArray(power+1){ coef[it] * k })
+        Polynom(DoubleArray(power + 1) { coef[it] * k })
 
     /**
      * Определение разности двух полиномов
@@ -70,7 +69,65 @@ class Polynom(coef: DoubleArray) {
     operator fun minus(other: Polynom) =
         this + other * -1.0
 
+    operator fun times(other: Polynom): Polynom{
+        //Создание массива коэффициентов нового полинома
+        val t = DoubleArray(power + other.power + 1){ 0.0 }
+        //Для каждого коэффициента первого полинома и
+        coef.forEachIndexed { ti, tc ->
+            //коэффициента второго полинома
+            other.coef.forEachIndexed{ oi, oc ->
+                t[ti + oi] += tc * oc
+            }
+        }
+        // Создание нового полинома по рассчитанным коэффициентам
+        return Polynom(t)
+    }
+
+    operator fun div(k: Double) : Polynom? =
+       if (k.compareTo(0.0)!=0)
+           this*(1.0/k)
+       else
+           null
+
+    /**
+     * Переопределение функции формирования строки с записью полинома
+     * @return Строка с представлением полинома
+     */
     override fun toString(): String {
-        return super.toString()
+        //Построитель строки, где будет формироваться результат
+        val res = StringBuilder()
+        //Степень полинома
+        val pow = power
+        //Вложенная функция, проверяющая, является ли число целым
+        fun isLong(x: Double) = abs(x-x.toLong()).compareTo(0.0) == 0
+        //Для каждого коэффициента в массиве...
+        coef.reversed().forEachIndexed { ind, v ->
+            //находим степень
+            val i = pow - ind
+            if (v.compareTo(0.0) != 0 || pow == 0) {
+                //Если это ненулевой коэффициент или степень полинома = 0...
+                //...выводим "+" или "-" в зависимости от знака коэффициента
+                //("+" выводится, только если работаем не со страшей степенью
+                res.append(if (v < 0) "-" else if (i < pow) "+" else "")
+                //получаем модуль коэффициента для дальнейшей работы
+                val c = abs(v)
+                //Если коэффициент по модулю не равен 1 или это коэфф. при 0й степени
+                if (c.compareTo(1.0) != 0 || i == 0)
+                    //добавляем коэффициент в вывод
+                    res.append(if (isLong(c)) c.toLong() else c)
+                //для всех степеней, кроме нулевой
+                if (i >= 1) {
+                    //выводим символ 'x'
+                    res.append('x')
+                    //и для всех степеней, больше 1, выводим ее номер
+                    if (i > 1) {
+                        res.append("^$i")
+                    }
+                }
+            }
+        }
+        //Возвращаем полученный результат, приведенный к строке
+        return res.toString()
     }
 }
+
