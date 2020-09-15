@@ -6,10 +6,13 @@ import kotlin.math.max
 class Polynom(coef: DoubleArray) {
 
     /**
-     * Коэффициенты полинома
+     * Коэффициенты полинома для использования внутри класса
      */
     private var coef: DoubleArray = coef.clone()
 
+    /**
+     * Свойство для доступа к коэффициентам полинома извне
+     */
     val coefficients: DoubleArray
         get() = coef.clone() //Возвращаем копию коэффициентов полинома
 
@@ -19,7 +22,9 @@ class Polynom(coef: DoubleArray) {
     val power : Int
     get() = coef.size - 1
 
-
+    /**
+     * Тело первичного конструктора
+     */
     init{
         correctPower()
     }
@@ -69,6 +74,10 @@ class Polynom(coef: DoubleArray) {
     operator fun minus(other: Polynom) =
         this + other * -1.0
 
+    /**
+     * @param other полином, на который производится умножение
+     * @return произведение двух полиномов
+     */
     operator fun times(other: Polynom): Polynom{
         //Создание массива коэффициентов нового полинома
         val t = DoubleArray(power + other.power + 1){ 0.0 }
@@ -83,6 +92,11 @@ class Polynom(coef: DoubleArray) {
         return Polynom(t)
     }
 
+    /**
+     * Деление полинома на число
+     * @param k число, на которое требуется подилить полином
+     * @return частное от деления полинома на число
+     */
     operator fun div(k: Double) : Polynom? =
        if (k.compareTo(0.0)!=0)
            this*(1.0/k)
