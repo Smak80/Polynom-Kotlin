@@ -143,5 +143,18 @@ class Polynom(coef: DoubleArray) {
         //Возвращаем полученный результат, приведенный к строке
         return res.toString()
     }
+
+    /**
+     * Вычисление значения полинома в точке
+     * @param x точка, в которой нужно вычислить значение полинома
+     * @return значение полинома в точке
+     */
+    operator fun invoke(x: Double): Double{
+        var pow = 1.0
+        return coef.reduce { acc, d ->
+            pow *= x; acc + d * pow
+        }
+    }
+
 }
 
