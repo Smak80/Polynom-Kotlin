@@ -3,12 +3,12 @@ package ru.smak.polynoms
 import kotlin.math.abs
 import kotlin.math.max
 
-class Polynom(coef: DoubleArray) {
+open class Polynom(coef: DoubleArray) {
 
     /**
      * Коэффициенты полинома для использования внутри класса
      */
-    private var coef: DoubleArray = coef.clone()
+    protected var coef: DoubleArray = coef.clone()
 
     /**
      * Свойство для доступа к коэффициентам полинома извне
@@ -54,7 +54,7 @@ class Polynom(coef: DoubleArray) {
         Polynom(DoubleArray(max(power, other.power) + 1)
         {
             (if (it < coef.size) coef[it] else 0.0) +
-                    (if (it < other.coef[it]) other.coef[it] else 0.0)
+                    (if (it < other.coef.size) other.coef[it] else 0.0)
         }
         )
 

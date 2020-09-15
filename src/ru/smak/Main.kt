@@ -1,5 +1,6 @@
 package ru.smak
 
+import ru.smak.polynoms.Lagrange
 import ru.smak.polynoms.Polynom
 
 fun main(){
@@ -16,4 +17,10 @@ fun main(){
     println(p5)
     println(p6)
     println(p1(2.0))
+    val l1 = Lagrange(mutableMapOf(
+            -1.0 to 1.0,
+            0.0 to 0.0,
+            1.0 to 1.0
+    ))
+    println(l1)
 }
