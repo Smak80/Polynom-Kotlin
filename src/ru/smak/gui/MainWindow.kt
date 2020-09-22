@@ -1,5 +1,6 @@
 package ru.smak.gui
 
+import ru.smak.components.LagrangeControl
 import java.awt.Color
 import java.awt.Dimension
 import javax.swing.GroupLayout
@@ -11,21 +12,20 @@ class MainWindow : JFrame(){
 
     private val minSize = Dimension(550, 400)
     private val mainPanel: JPanel
-    private val controlPanel: JPanel
+    private val controlPanel: LagrangeControl
     init{
         defaultCloseOperation = EXIT_ON_CLOSE
         minimumSize = Dimension(minSize.width+200, minSize.height+400)
         mainPanel = JPanel()
         mainPanel.background = Color.WHITE
-        controlPanel = JPanel()
-        controlPanel.border = EtchedBorder()
+        controlPanel = LagrangeControl()
         val gl = GroupLayout(contentPane)
 
         gl.setVerticalGroup(gl.createSequentialGroup()
                 .addGap(4)
                 .addComponent(mainPanel, minSize.height, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
                 .addGap(4)
-                .addComponent(controlPanel, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(controlPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(4)
         )
 
