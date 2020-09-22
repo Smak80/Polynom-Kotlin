@@ -1,5 +1,6 @@
 package ru.smak
 
+import ru.smak.gui.MainWindow
 import ru.smak.polynoms.Lagrange
 import ru.smak.polynoms.Polynom
 
@@ -23,4 +24,7 @@ fun main(){
             1.0 to 1.0
     ))
     println(l1)
+
+    val w = MainWindow()
+    w.isVisible = true
 }
