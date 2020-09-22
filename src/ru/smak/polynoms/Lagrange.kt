@@ -4,7 +4,7 @@ class Lagrange(xfx: MutableMap<Double, Double>) : Polynom(){
 
     val xfx = xfx.toMutableMap()
     init{
-        var p = Polynom()
+        val p = Polynom()
         xfx.forEach {
             val r = fundamental(it.key)
             if (r != null) p += r * it.value

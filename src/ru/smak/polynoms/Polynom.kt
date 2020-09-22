@@ -58,6 +58,14 @@ open class Polynom(coef: DoubleArray) {
         }
         )
 
+    operator fun plusAssign(other: Polynom) {
+        coef = DoubleArray(max(power, other.power) + 1)
+        {
+            (if (it < coef.size) coef[it] else 0.0) +
+                    (if (it < other.coef.size) other.coef[it] else 0.0)
+        }
+    }
+
     /**
      * Определение значения произведения полинома на число
      * @param k вещественный коэффициент
