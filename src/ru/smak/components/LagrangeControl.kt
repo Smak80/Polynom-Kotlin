@@ -42,6 +42,8 @@ class LagrangeControl : JPanel(){
         smYMin = SpinnerNumberModel(-5.0, -100.0, 4.9, 0.1)
         smYMax = SpinnerNumberModel(5.0, -4.9, 100.0, 0.1)
 
+        smXMax.addChangeListener {  }
+
         sXMin = JSpinner(smXMin)
         sXMax = JSpinner(smXMax)
         sYMin = JSpinner(smYMin)
