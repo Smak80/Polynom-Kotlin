@@ -1,11 +1,9 @@
-package ru.smak.components
+package ru.smak.gui.components
 
 import javax.swing.*
 import javax.swing.border.EtchedBorder
-import javax.swing.event.ChangeEvent
-import javax.swing.event.ChangeListener
 
-class LagrangeControl : JPanel(){
+class ControlPanel : JPanel(){
 
     private val lXMin: JLabel
     private val lXMax: JLabel

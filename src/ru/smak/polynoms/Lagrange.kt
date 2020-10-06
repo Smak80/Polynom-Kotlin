@@ -1,5 +1,6 @@
 package ru.smak.polynoms
 
+
 class Lagrange(xfx: MutableMap<Double, Double>) : Polynom(){
 
     val xfx = xfx.toMutableMap()
