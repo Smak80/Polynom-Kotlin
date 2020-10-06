@@ -2,6 +2,8 @@ package ru.smak.components
 
 import javax.swing.*
 import javax.swing.border.EtchedBorder
+import javax.swing.event.ChangeEvent
+import javax.swing.event.ChangeListener
 
 class LagrangeControl : JPanel(){
 
@@ -42,7 +44,10 @@ class LagrangeControl : JPanel(){
         smYMin = SpinnerNumberModel(-5.0, -100.0, 4.9, 0.1)
         smYMax = SpinnerNumberModel(5.0, -4.9, 100.0, 0.1)
 
-        smXMax.addChangeListener {  }
+        smXMin.addChangeListener{ smXMax.minimum = smXMin.number.toDouble() + 0.1 }
+        smXMax.addChangeListener{ smXMin.maximum = smXMax.number.toDouble() - 0.1 }
+        smYMin.addChangeListener{ smYMax.minimum = smYMin.number.toDouble() + 0.1 }
+        smYMax.addChangeListener{ smYMin.maximum = smYMax.number.toDouble() - 0.1 }
 
         sXMin = JSpinner(smXMin)
         sXMax = JSpinner(smXMax)
