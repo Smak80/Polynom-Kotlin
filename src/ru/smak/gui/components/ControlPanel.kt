@@ -15,15 +15,17 @@ class ControlPanel : JPanel(){
     private val sYMin: JSpinner
     private val sYMax: JSpinner
 
-    private val smXMin: SpinnerNumberModel
-    private val smXMax: SpinnerNumberModel
-    private val smYMin: SpinnerNumberModel
-    private val smYMax: SpinnerNumberModel
+    val smXMin: SpinnerNumberModel
+    val smXMax: SpinnerNumberModel
+    val smYMin: SpinnerNumberModel
+    val smYMax: SpinnerNumberModel
 
     companion object{
         private val MIN_SZ = GroupLayout.PREFERRED_SIZE
         private val MAX_SZ = GroupLayout.DEFAULT_SIZE
     }
+
+    private val valChangeListeners = mutableListOf<()->Unit>()
 
     init{
         border = EtchedBorder()
@@ -42,10 +44,22 @@ class ControlPanel : JPanel(){
         smYMin = SpinnerNumberModel(-5.0, -100.0, 4.9, 0.1)
         smYMax = SpinnerNumberModel(5.0, -4.9, 100.0, 0.1)
 
-        smXMin.addChangeListener{ smXMax.minimum = smXMin.number.toDouble() + 0.1 }
-        smXMax.addChangeListener{ smXMin.maximum = smXMax.number.toDouble() - 0.1 }
-        smYMin.addChangeListener{ smYMax.minimum = smYMin.number.toDouble() + 0.1 }
-        smYMax.addChangeListener{ smYMin.maximum = smYMax.number.toDouble() - 0.1 }
+        smXMin.addChangeListener{
+            smXMax.minimum = smXMin.number.toDouble() + 0.1
+            valChangeListeners.forEach { it() }
+        }
+        smXMax.addChangeListener{
+            smXMin.maximum = smXMax.number.toDouble() - 0.1
+            valChangeListeners.forEach { it() }
+        }
+        smYMin.addChangeListener{
+            smYMax.minimum = smYMin.number.toDouble() + 0.1
+            valChangeListeners.forEach { it() }
+        }
+        smYMax.addChangeListener{
+            smYMin.maximum = smYMax.number.toDouble() - 0.1
+            valChangeListeners.forEach { it() }
+        }
 
         sXMin = JSpinner(smXMin)
         sXMax = JSpinner(smXMax)
@@ -102,5 +116,13 @@ class ControlPanel : JPanel(){
                         .addGap(4)
         )
         layout = gl
+    }
+
+    fun addValChangeListener(l: ()->Unit){
+        valChangeListeners.add(l)
+    }
+
+    fun removeValChangeListener(l: ()->Unit){
+        valChangeListeners.remove(l)
     }
 }

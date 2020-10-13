@@ -2,12 +2,15 @@ package ru.smak.gui
 
 import ru.smak.gui.components.ControlPanel
 import ru.smak.gui.components.GraphicsPanel
-import ru.smak.gui.graphics.CartesianPanter
+import ru.smak.gui.graphics.CartesianPainter
+import ru.smak.gui.graphics.convertation.CartesianScreenPlane
 import java.awt.Color
 import java.awt.Dimension
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
+import java.awt.event.ComponentListener
 import javax.swing.GroupLayout
 import javax.swing.JFrame
-import javax.swing.JPanel
 
 class MainWindow : JFrame(){
 
@@ -17,8 +20,7 @@ class MainWindow : JFrame(){
     init{
         defaultCloseOperation = EXIT_ON_CLOSE
         minimumSize = Dimension(minSize.width+200, minSize.height+400)
-        val dp = CartesianPanter()
-        mainPanel = GraphicsPanel(dp)
+        mainPanel = GraphicsPanel()
         mainPanel.background = Color.WHITE
         controlPanel = ControlPanel()
         val gl = GroupLayout(contentPane)
@@ -41,5 +43,27 @@ class MainWindow : JFrame(){
                 .addGap(4))
         layout = gl
         pack()
+        val plane = CartesianScreenPlane(
+                mainPanel.width, mainPanel.height,
+                controlPanel.smXMin.number.toDouble(),
+                controlPanel.smXMax.number.toDouble(),
+                controlPanel.smYMin.number.toDouble(),
+                controlPanel.smYMax.number.toDouble()
+        )
+        val dp = CartesianPainter(plane)
+        mainPanel.addComponentListener(object : ComponentAdapter() {
+            override fun componentResized(e: ComponentEvent?) {
+                dp.plane.realWidth = mainPanel.width
+                dp.plane.realHeight = mainPanel.height
+            }
+        })
+        controlPanel.addValChangeListener {
+            dp.plane.xMin = controlPanel.smXMin.number.toDouble()
+            dp.plane.xMax = controlPanel.smXMax.number.toDouble()
+            dp.plane.yMin = controlPanel.smYMin.number.toDouble()
+            dp.plane.yMax = controlPanel.smYMax.number.toDouble()
+            mainPanel.repaint()
+        }
+        mainPanel.painter = dp
     }
 }
