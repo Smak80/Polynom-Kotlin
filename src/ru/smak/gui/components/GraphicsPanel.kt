@@ -4,7 +4,7 @@ import ru.smak.gui.graphics.Painter
 import java.awt.Graphics
 import javax.swing.JPanel
 
-class GraphicsPanel() : JPanel(){
+class GraphicsPanel : JPanel(){
     var painter: Painter? = null
     set(value) {
         field = value
